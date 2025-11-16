@@ -16,10 +16,66 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Main security configuration class for the API Gateway Service.
+ * <p>
+ * This configuration establishes comprehensive security controls for the reactive
+ * Spring WebFlux application, including:
+ * <ul>
+ *     <li>JWT-based stateless authentication</li>
+ *     <li>Role-based authorization for various endpoints</li>
+ *     <li>CSRF protection (disabled for stateless APIs)</li>
+ *     <li>Custom exception handling for authentication and authorization failures</li>
+ *     <li>Public access configuration for authentication, registration, and documentation endpoints</li>
+ * </ul>
+ * </p>
+ * <p>
+ * The security filter chain processes requests through JWT authentication filters
+ * and enforces role-based access control (RBAC) with ADMIN and STUDENT roles.
+ * </p>
+ *
+ * @author HCL Tech
+ * @version 1.0
+ * @since 1.0
+ */
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
+    /**
+     * Configures the Spring Security filter chain for the API Gateway.
+     * <p>
+     * This method establishes the complete security configuration including:
+     * </p>
+     * <h3>Stateless Configuration</h3>
+     * <ul>
+     *     <li>No server-side sessions using {@link NoOpServerSecurityContextRepository}</li>
+     *     <li>CSRF protection disabled (suitable for stateless JWT APIs)</li>
+     *     <li>HTTP Basic and form login disabled</li>
+     * </ul>
+     *
+     * <h3>Exception Handling</h3>
+     * <ul>
+     *     <li>Custom 401 Unauthorized responses for authentication failures</li>
+     *     <li>Custom 403 Forbidden responses for authorization failures</li>
+     *     <li>JSON-formatted error responses</li>
+     *     <li>Removal of WWW-Authenticate header to prevent browser authentication popups</li>
+     * </ul>
+     *
+     * <h3>Authorization Rules</h3>
+     * <ul>
+     *     <li><b>Public Access:</b> CORS preflight, Swagger/OpenAPI docs, actuator endpoints</li>
+     *     <li><b>Authentication Endpoints:</b> /api/auth/test, /api/auth/register, /api/auth/login</li>
+     *     <li><b>Registration Endpoints:</b> /api/students/register, /api/admins/register</li>
+     *     <li><b>Public Read-Only:</b> GET requests to universities and courses</li>
+     *     <li><b>Role-Based:</b> ADMIN and STUDENT roles for protected resources</li>
+     *     <li><b>Default:</b> All other endpoints require authentication</li>
+     * </ul>
+     *
+     * @param http the {@link ServerHttpSecurity} configuration object
+     * @param authenticationWebFilter the JWT authentication web filter for token validation
+     * @return the configured security web filter chain
+     */
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(
             ServerHttpSecurity http,

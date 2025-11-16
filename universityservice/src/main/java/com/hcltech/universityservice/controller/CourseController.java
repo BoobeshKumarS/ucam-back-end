@@ -18,11 +18,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * REST controller for managing university courses.
+ * <p>
+ * This controller provides comprehensive course management functionality including:
+ * <ul>
+ *   <li>Creating courses for universities (requires ADMIN role)</li>
+ *   <li>Retrieving course information with pagination</li>
+ *   <li>Querying courses by university</li>
+ *   <li>Updating course details (requires ADMIN role)</li>
+ *   <li>Deleting courses (requires ADMIN role)</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Course read operations are publicly accessible, while create, update,
+ * and delete operations require authentication and ADMIN role authorization.
+ * </p>
+ *
+ * @author HCL Tech
+ * @version 1.0
+ * @since 1.0
+ * @see CourseService
+ * @see CourseRequestDTO
+ * @see CourseResponseDTO
+ */
 @RestController
 @RequestMapping("/api/courses")
 @Tag(name = "Courses", description = "Course-related operations")
 @RequiredArgsConstructor
 public class CourseController {
+
+	/**
+	 * Service layer for course business logic.
+	 */
 	private final CourseService courseService;
 
 	@Operation(summary = "Create course for a university", description = "Create a new course for the University. Requires CREATE_COURSES permission for sub-admins")

@@ -32,12 +32,55 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Web security configuration class for the Authentication Service.
+ *
+ * <p>This configuration class sets up Spring Security with JWT-based authentication,
+ * CORS settings, authorization rules, and method-level security. It configures
+ * the security filter chain, authentication providers, and initializes default
+ * admin user on application startup.</p>
+ *
+ * <p>Key features include:
+ * <ul>
+ *   <li>Stateless session management using JWT tokens</li>
+ *   <li>CORS configuration for frontend integration</li>
+ *   <li>Role-based access control (ADMIN, STUDENT)</li>
+ *   <li>Public endpoints for registration and login</li>
+ *   <li>JWT filter integration for token validation</li>
+ * </ul>
+ *
+ * @author HCL Tech
+ * @version 1.0
+ * @since 2025-01-01
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
+	/**
+	 * Logger instance for security-related logging.
+	 */
 	private static final Logger securityLogger = LoggerFactory.getLogger(WebSecurityConfig.class);
 
+	/**
+	 * Configures the security filter chain for HTTP security.
+	 *
+	 * <p>This method sets up the complete security configuration including:
+	 * <ul>
+	 *   <li>CSRF protection disabled for stateless API</li>
+	 *   <li>Stateless session management</li>
+	 *   <li>URL-based authorization rules</li>
+	 *   <li>JWT authentication filter</li>
+	 *   <li>Custom authentication provider</li>
+	 * </ul>
+	 *
+	 * @param http the {@link HttpSecurity} object to configure
+	 * @param userDetailsService the custom user details service for loading user data
+	 * @param passwordEncoder the password encoder for authentication
+	 * @param jwtAuthenticationFilter the JWT filter for token validation
+	 * @return the configured {@link SecurityFilterChain}
+	 * @throws Exception if an error occurs during configuration
+	 */
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http, MyUserDetailsService userDetailsService,
 			PasswordEncoder passwordEncoder, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
@@ -61,6 +104,15 @@ public class WebSecurityConfig {
 		return http.build();
 	}
 
+	/**
+	 * Configures CORS (Cross-Origin Resource Sharing) settings.
+	 *
+	 * <p>This configuration allows the React frontend application to communicate
+	 * with the backend API. It specifies allowed origins, HTTP methods, headers,
+	 * and enables credentials for cookie-based authentication.</p>
+	 *
+	 * @return a {@link CorsConfigurationSource} with configured CORS settings
+	 */
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();

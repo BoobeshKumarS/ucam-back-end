@@ -19,12 +19,42 @@ import com.hcltech.applicationservice.service.ApplicationFormService;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * REST controller for managing university application forms.
+ *
+ * This controller provides comprehensive endpoints for the complete lifecycle
+ * of student applications to universities. It handles application creation,
+ * retrieval, updates, deletion, submission, and validation operations.
+ *
+ * All endpoints require authentication via JWT token and appropriate role authorization
+ * (STUDENT or ADMIN). The controller supports operations such as:
+ * - Creating draft applications
+ * - Submitting applications for review
+ * - Retrieving applications by various criteria (ID, student, university, status)
+ * - Updating application details and status
+ * - Validating application ownership
+ * - Paginated retrieval for large datasets
+ *
+ * Base path: /api/applications
+ *
+ * Security: All endpoints require STUDENT or ADMIN role via @PreAuthorize
+ *
+ * @author HCLTech
+ * @version 1.0
+ * @since 2025-01-01
+ * @see ApplicationFormService
+ * @see ApplicationFormRequestDTO
+ * @see ApplicationFormResponseDTO
+ */
 @RestController
 @RequestMapping("/api/applications")
 @Tag(name = "Application Form API", description = "Endpoints for applying to university")
 @RequiredArgsConstructor
 public class ApplicationFormController {
 
+	/**
+	 * Service layer dependency for application form business logic.
+	 */
     public final ApplicationFormService applicationFormService;
 
     @Operation(summary = "Create a new application")

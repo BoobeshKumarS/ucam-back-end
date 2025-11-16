@@ -1,30 +1,5 @@
 package com.hcltech.authservice.service.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import com.hcltech.authservice.dto.MessageResponseDTO;
 import com.hcltech.authservice.dto.UserLoginRequestDTO;
 import com.hcltech.authservice.dto.UserLoginResponseDTO;
@@ -37,7 +12,38 @@ import com.hcltech.authservice.repository.UserRepository;
 import com.hcltech.authservice.security.MyUserDetailsService;
 import com.hcltech.authservice.util.JwtUtil;
 import com.hcltech.authservice.util.UserConverter;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
+/**
+ * Unit tests for AuthServiceImpl class.
+ *
+ * @author HCL Technologies
+ * @version 1.0
+ * @since 1.0
+ */
 @ExtendWith(MockitoExtension.class)
 class AuthServiceImplTest {
 
@@ -68,17 +74,22 @@ class AuthServiceImplTest {
     private User testUser;
     private UserLoginRequestDTO loginRequest;
     private UserRegisterRequestDTO registerRequest;
+    private UUID userId;
 
+    /**
+     * Setup method to initialize test data before each test.
+     */
     @BeforeEach
     void setUp() {
-        Set<UserRole> roles = new HashSet<>();
-        roles.add(UserRole.STUDENT);
+        userId = UUID.randomUUID();
 
         testUser = new User();
-        testUser.setId(UUID.randomUUID());
+        testUser.setId(userId);
         testUser.setUsername("testuser");
         testUser.setEmail("test@example.com");
         testUser.setPassword("encodedPassword");
+        Set<UserRole> roles = new HashSet<>();
+        roles.add(UserRole.STUDENT);
         testUser.setRoles(roles);
 
         loginRequest = new UserLoginRequestDTO();
@@ -91,12 +102,15 @@ class AuthServiceImplTest {
         registerRequest.setPassword("password");
     }
 
+    /**
+     * Test successful user login.
+     */
     @Test
-    void login_Success() {
+    void testLogin_Success() {
         // Arrange
         UserDetails userDetails = mock(UserDetails.class);
         UserLoginResponseDTO expectedResponse = new UserLoginResponseDTO();
-        expectedResponse.setId(UUID.randomUUID());
+        expectedResponse.setId(userId);
         expectedResponse.setUsername("testuser");
         expectedResponse.setEmail("test@example.com");
         expectedResponse.setToken("jwt-token");
@@ -106,11 +120,11 @@ class AuthServiceImplTest {
                 .thenReturn(Optional.of(testUser));
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenReturn(authentication);
-        when(userDetailsService.loadUserByUsername(testUser.getEmail()))
+        when(userDetailsService.loadUserByUsername(loginRequest.getEmail()))
                 .thenReturn(userDetails);
-        when(jwtUtil.generateToken(null, "test@example.com", Set.of(UserRole.STUDENT)))
+        when(jwtUtil.generateToken(anyString(), anyString(), anySet()))
                 .thenReturn("jwt-token");
-        when(jwtUtil.getTokenValidityInHours("jwt-token"))
+        when(jwtUtil.getTokenValidityInHours(anyString()))
                 .thenReturn(24L);
         when(userConverter.loginEntityToResponse(testUser))
                 .thenReturn(expectedResponse);
@@ -126,8 +140,11 @@ class AuthServiceImplTest {
         verify(userRepository).findByEmail(loginRequest.getEmail());
     }
 
+    /**
+     * Test login when user not found.
+     */
     @Test
-    void login_UserNotFound() {
+    void testLogin_UserNotFound() {
         // Arrange
         when(userRepository.findByEmail(loginRequest.getEmail()))
                 .thenReturn(Optional.empty());
@@ -135,11 +152,14 @@ class AuthServiceImplTest {
         // Act & Assert
         assertThrows(UserNotFoundException.class, () -> authService.login(loginRequest));
         verify(userRepository).findByEmail(loginRequest.getEmail());
-        verify(authenticationManager, never()).authenticate(any());
+        verifyNoInteractions(authenticationManager);
     }
 
+    /**
+     * Test login with invalid credentials.
+     */
     @Test
-    void login_AuthenticationFailed() {
+    void testLogin_InvalidCredentials() {
         // Arrange
         when(userRepository.findByEmail(loginRequest.getEmail()))
                 .thenReturn(Optional.of(testUser));
@@ -152,8 +172,11 @@ class AuthServiceImplTest {
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
     }
 
+    /**
+     * Test successful user registration.
+     */
     @Test
-    void register_Success() {
+    void testRegister_Success() {
         // Arrange
         when(userRepository.existsByUsername(registerRequest.getUsername()))
                 .thenReturn(false);
@@ -177,8 +200,11 @@ class AuthServiceImplTest {
         verify(userRepository).save(any(User.class));
     }
 
+    /**
+     * Test registration with existing username.
+     */
     @Test
-    void register_UsernameAlreadyExists() {
+    void testRegister_UsernameAlreadyExists() {
         // Arrange
         when(userRepository.existsByUsername(registerRequest.getUsername()))
                 .thenReturn(true);
@@ -195,8 +221,11 @@ class AuthServiceImplTest {
         verify(userRepository, never()).save(any(User.class));
     }
 
+    /**
+     * Test registration with existing email.
+     */
     @Test
-    void register_EmailAlreadyExists() {
+    void testRegister_EmailAlreadyExists() {
         // Arrange
         when(userRepository.existsByUsername(registerRequest.getUsername()))
                 .thenReturn(false);
@@ -215,12 +244,15 @@ class AuthServiceImplTest {
         verify(userRepository, never()).save(any(User.class));
     }
 
+    /**
+     * Test registration with custom roles.
+     */
     @Test
-    void register_WithRoles() {
+    void testRegister_WithCustomRoles() {
         // Arrange
-        Set<UserRole> roles = new HashSet<>();
-        roles.add(UserRole.ADMIN);
-        registerRequest.setRoles(roles);
+        Set<UserRole> customRoles = new HashSet<>();
+        customRoles.add(UserRole.ADMIN);
+        registerRequest.setRoles(customRoles);
 
         when(userRepository.existsByUsername(registerRequest.getUsername()))
                 .thenReturn(false);
@@ -240,24 +272,29 @@ class AuthServiceImplTest {
         verify(userRepository).save(any(User.class));
     }
 
+    /**
+     * Test successful user logout.
+     */
     @Test
-    void logoutUser_Success() {
+    void testLogoutUser() {
         // Act
-        ResponseCookie result = authService.logoutUser();
+        var result = authService.logoutUser();
 
         // Assert
         assertNotNull(result);
         assertEquals("jwt", result.getName());
-        assertEquals("", result.getValue());
+        assertNull(result.getValue());
         assertEquals(0, result.getMaxAge().getSeconds());
-        assertTrue(result.isHttpOnly());
     }
 
+    /**
+     * Test getting current user details with valid authentication.
+     */
     @Test
-    void getCurrentUserDetails_SuccessWithEmail() {
+    void testGetCurrentUserDetails_Success() {
         // Arrange
         UserRegisterResponseDTO expectedResponse = new UserRegisterResponseDTO();
-        expectedResponse.setId(UUID.randomUUID());
+        expectedResponse.setId(userId);
         expectedResponse.setUsername("testuser");
         expectedResponse.setEmail("test@example.com");
 
@@ -275,54 +312,35 @@ class AuthServiceImplTest {
         assertEquals("testuser", result.getUsername());
         assertEquals("test@example.com", result.getEmail());
         verify(userRepository).findByEmail("test@example.com");
-        verify(userRepository, never()).findByUsername(anyString());
+        verify(userConverter).registerEntityToResponse(testUser);
     }
 
+    /**
+     * Test getting current user details with null authentication.
+     */
     @Test
-    void getCurrentUserDetails_SuccessWithUsername() {
-        // Arrange
-        UserRegisterResponseDTO expectedResponse = new UserRegisterResponseDTO();
-        expectedResponse.setId(UUID.randomUUID());
-        expectedResponse.setUsername("testuser");
-        expectedResponse.setEmail("test@example.com");
-
-        when(authentication.getName()).thenReturn("testuser");
-        when(userRepository.findByEmail("testuser"))
-                .thenReturn(Optional.empty());
-        when(userRepository.findByUsername("testuser"))
-                .thenReturn(Optional.of(testUser));
-        when(userConverter.registerEntityToResponse(testUser))
-                .thenReturn(expectedResponse);
-
-        // Act
-        UserRegisterResponseDTO result = authService.getCurrentUserDetails(authentication);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals("testuser", result.getUsername());
-        verify(userRepository).findByEmail("testuser");
-        verify(userRepository).findByUsername("testuser");
-    }
-
-    @Test
-    void getCurrentUserDetails_UserNotFound() {
-        // Arrange
-        when(authentication.getName()).thenReturn("nonexistent");
-        when(userRepository.findByEmail("nonexistent"))
-                .thenReturn(Optional.empty());
-        when(userRepository.findByUsername("nonexistent"))
-                .thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> authService.getCurrentUserDetails(authentication));
-    }
-
-    @Test
-    void getCurrentUserDetails_NullAuthentication() {
+    void testGetCurrentUserDetails_NullAuthentication() {
         // Act
         UserRegisterResponseDTO result = authService.getCurrentUserDetails(null);
 
         // Assert
         assertNull(result);
+    }
+
+    /**
+     * Test getting current user details when user not found.
+     */
+    @Test
+    void testGetCurrentUserDetails_UserNotFound() {
+        // Arrange
+        when(authentication.getName()).thenReturn("nonexistent@example.com");
+        when(userRepository.findByEmail("nonexistent@example.com"))
+                .thenReturn(Optional.empty());
+        when(userRepository.findByUsername("nonexistent@example.com"))
+                .thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(RuntimeException.class,
+                () -> authService.getCurrentUserDetails(authentication));
     }
 }

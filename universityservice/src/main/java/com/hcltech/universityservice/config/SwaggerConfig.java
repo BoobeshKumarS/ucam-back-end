@@ -11,8 +11,35 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class for Swagger/OpenAPI documentation.
+ * <p>
+ * This configuration sets up comprehensive API documentation for the University Service,
+ * including security schemes, server configurations, and API metadata.
+ * The generated documentation is accessible through Swagger UI.
+ * </p>
+ *
+ * @author HCL Tech
+ * @version 1.0
+ * @since 1.0
+ * @see OpenAPI
+ */
 @Configuration
 public class SwaggerConfig {
+
+	/**
+	 * Creates and configures the OpenAPI specification for the University Service API.
+	 * <p>
+	 * This method configures:
+	 * <ul>
+	 *   <li>API metadata (title, version, description)</li>
+	 *   <li>Multiple server configurations (API Gateway and direct service access)</li>
+	 *   <li>JWT Bearer token authentication scheme</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @return configured OpenAPI instance with complete API documentation setup
+	 */
     @Bean
     OpenAPI customOpenAPI() {
     	Server apiGatewayService = new Server()

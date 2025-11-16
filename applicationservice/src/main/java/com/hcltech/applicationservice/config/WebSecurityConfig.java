@@ -19,14 +19,64 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 
+/**
+ * Spring Security configuration for the Application Service.
+ *
+ * This configuration class establishes the security framework for the application,
+ * implementing JWT-based authentication and role-based access control. It configures
+ * the security filter chain, CORS policies, and method-level security.
+ *
+ * Key security features:
+ * - Stateless authentication using JWT tokens
+ * - CSRF protection disabled (appropriate for stateless APIs)
+ * - Role-based access control (STUDENT and ADMIN roles)
+ * - CORS configuration for cross-origin requests from the React frontend
+ * - Public access to Swagger documentation and health endpoints
+ * - JWT authentication filter integrated into the security chain
+ *
+ * The configuration follows security best practices for microservices:
+ * - Stateless session management
+ * - Token-based authentication
+ * - Method-level authorization with @PreAuthorize
+ *
+ * @author HCLTech
+ * @version 1.0
+ * @since 2025-01-01
+ * @see JwtAuthenticationFilter
+ * @see EnableWebSecurity
+ * @see EnableMethodSecurity
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
-	
+
+	/**
+	 * JWT authentication filter for validating and processing JWT tokens.
+	 */
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+	/**
+	 * Configures the security filter chain for HTTP requests.
+	 *
+	 * This method establishes the security rules for the application:
+	 * - Disables CSRF protection (suitable for stateless JWT-based APIs)
+	 * - Sets stateless session management (no server-side sessions)
+	 * - Defines public endpoints (Swagger, actuator, error pages)
+	 * - Requires STUDENT or ADMIN role for /api/applications/** endpoints
+	 * - Adds JWT authentication filter before the standard username/password filter
+	 *
+	 * Public endpoints accessible without authentication:
+	 * - /applicationservice/v3/api-docs/** (API documentation)
+	 * - /swagger-ui/** (Swagger UI interface)
+	 * - /actuator/** (health and metrics endpoints)
+	 * - /error (error handling)
+	 *
+	 * @param http the HttpSecurity object to configure
+	 * @return configured SecurityFilterChain
+	 * @throws Exception if an error occurs during configuration
+	 */
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
@@ -68,6 +118,20 @@ public class WebSecurityConfig {
 //        return new CorsFilter(source);
 //    }
 	
+	/**
+	 * Configures CORS (Cross-Origin Resource Sharing) settings for the application.
+	 *
+	 * This configuration allows the React frontend application running on localhost:3000
+	 * to make cross-origin requests to this service. It defines:
+	 * - Allowed origins (React app URL)
+	 * - Allowed HTTP methods (GET, POST, PUT, DELETE, OPTIONS)
+	 * - Allowed headers (all headers accepted)
+	 * - Credentials support enabled
+	 *
+	 * The configuration is applied to all endpoints (/**) in the application.
+	 *
+	 * @return configured CorsConfigurationSource with CORS policies
+	 */
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
@@ -81,6 +145,17 @@ public class WebSecurityConfig {
 		return source;
 	}
 	
+	/**
+	 * Provides the AuthenticationManager bean for authentication processing.
+	 *
+	 * This method exposes Spring Security's AuthenticationManager as a Spring bean,
+	 * making it available for dependency injection. The AuthenticationManager is
+	 * responsible for authenticating users based on provided credentials.
+	 *
+	 * @param authConfig the AuthenticationConfiguration provided by Spring Security
+	 * @return the configured AuthenticationManager
+	 * @throws Exception if an error occurs while retrieving the AuthenticationManager
+	 */
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 		return authConfig.getAuthenticationManager();

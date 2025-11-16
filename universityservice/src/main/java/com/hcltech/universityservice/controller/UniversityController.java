@@ -20,12 +20,39 @@ import com.hcltech.universityservice.service.UniversityService;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * REST controller for managing universities.
+ * <p>
+ * This controller provides comprehensive CRUD operations for universities including:
+ * <ul>
+ *   <li>Creating new universities (requires ADMIN role)</li>
+ *   <li>Retrieving university information with pagination support</li>
+ *   <li>Updating university details (requires ADMIN role)</li>
+ *   <li>Deleting universities (requires ADMIN role)</li>
+ *   <li>Querying universities by admin ID</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Read operations are publicly accessible, while write operations require
+ * authentication and ADMIN role authorization.
+ * </p>
+ *
+ * @author HCL Tech
+ * @version 1.0
+ * @since 1.0
+ * @see UniversityService
+ * @see UniversityRequestDTO
+ * @see UniversityResponseDTO
+ */
 @RestController
 @RequestMapping("/api/universities")
 @Tag(name = "University Management", description = "APIs for managing universities and course mappings")
 @RequiredArgsConstructor
 public class UniversityController {
 
+	/**
+	 * Service layer for university business logic.
+	 */
 	private final UniversityService universityService;
 
 	@Operation(summary = "Create a new university")

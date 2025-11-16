@@ -18,14 +18,62 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+/**
+ * Web security configuration for the University Service.
+ * <p>
+ * This configuration class defines security policies including:
+ * <ul>
+ *   <li>JWT-based authentication using custom filter</li>
+ *   <li>Stateless session management</li>
+ *   <li>Role-based access control (RBAC) for API endpoints</li>
+ *   <li>CORS configuration for cross-origin requests</li>
+ *   <li>Public endpoint access rules</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Public endpoints (no authentication required):
+ * - Swagger documentation endpoints
+ * - Admin registration
+ * - University and course read operations (GET)
+ * </p>
+ * <p>
+ * Protected endpoints (ADMIN role required):
+ * - All POST, PUT, DELETE operations for universities and courses
+ * - Admin management operations
+ * </p>
+ *
+ * @author HCL Tech
+ * @version 1.0
+ * @since 1.0
+ * @see JwtAuthenticationFilter
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
-	
+
+	/**
+	 * JWT authentication filter for processing and validating JWT tokens.
+	 */
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+	/**
+	 * Configures the security filter chain with authentication and authorization rules.
+	 * <p>
+	 * This method sets up:
+	 * <ul>
+	 *   <li>CSRF protection disabled (suitable for stateless REST APIs)</li>
+	 *   <li>Stateless session management</li>
+	 *   <li>Authorization rules for different endpoints</li>
+	 *   <li>JWT authentication filter before username/password authentication</li>
+	 * </ul>
+	 * </p>
+	 *
+	 * @param http the HttpSecurity to configure
+	 * @return configured SecurityFilterChain
+	 * @throws Exception if an error occurs during configuration
+	 */
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
@@ -82,6 +130,15 @@ public class WebSecurityConfig {
 //        return new CorsFilter(source);
 //    }
 	
+	/**
+	 * Configures Cross-Origin Resource Sharing (CORS) settings.
+	 * <p>
+	 * This configuration allows the React frontend application to access
+	 * the University Service APIs from a different origin (localhost:3000).
+	 * </p>
+	 *
+	 * @return configured CorsConfigurationSource with allowed origins, methods, and headers
+	 */
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
@@ -95,6 +152,13 @@ public class WebSecurityConfig {
 		return source;
 	}
 	
+	/**
+	 * Provides the AuthenticationManager bean for authentication operations.
+	 *
+	 * @param authConfig the authentication configuration
+	 * @return the configured AuthenticationManager
+	 * @throws Exception if an error occurs retrieving the authentication manager
+	 */
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 		return authConfig.getAuthenticationManager();
