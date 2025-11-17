@@ -17,9 +17,9 @@ import com.hcltech.authservice.entity.User;
  * <p>This repository handles all database interactions for the User entity
  * including finding users by various identifiers and checking for existence.
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see User
  * @see org.springframework.data.jpa.repository.JpaRepository
  */

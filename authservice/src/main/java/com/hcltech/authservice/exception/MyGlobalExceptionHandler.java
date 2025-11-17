@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  *   <li>ResourceAlreadyExistsException - Returns 409 CONFLICT</li>
  * </ul>
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see RestControllerAdvice
  * @see ExceptionHandler
  */

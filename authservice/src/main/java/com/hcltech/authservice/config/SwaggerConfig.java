@@ -33,9 +33,9 @@ import org.springframework.context.annotation.Configuration;
  * }
  * </pre>
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see OpenAPI
  * @see Configuration
  */

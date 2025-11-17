@@ -15,9 +15,9 @@ package com.hcltech.authservice.entity;
  * <p>Roles are stored as strings in the database and used by Spring Security
  * for method-level and URL-based authorization.
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see org.springframework.security.access.prepost.PreAuthorize
  */
 public enum UserRole {

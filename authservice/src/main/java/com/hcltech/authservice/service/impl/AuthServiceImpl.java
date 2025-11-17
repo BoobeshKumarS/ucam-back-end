@@ -43,9 +43,9 @@ import java.util.Set;
  *   <li>Role assignment and management</li>
  * </ul>
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see AuthService
  * @see AuthenticationManager
  * @see UserRepository

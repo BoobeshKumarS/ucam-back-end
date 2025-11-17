@@ -18,9 +18,9 @@ import com.hcltech.authservice.entity.User;
  *   <li>Login responses (with authentication tokens)</li>
  * </ul>
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see User
  * @see UserRegisterResponseDTO
  * @see UserLoginResponseDTO

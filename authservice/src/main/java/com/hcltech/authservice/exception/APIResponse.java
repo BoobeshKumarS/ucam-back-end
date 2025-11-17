@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
  * <p>Used by global exception handlers and controller methods to ensure
  * consistent response format across the entire application.
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  */
 @Data
 @AllArgsConstructor

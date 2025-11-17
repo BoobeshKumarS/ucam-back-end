@@ -11,9 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * <p>This configuration class defines beans that are used across the application,
  * particularly for password encoding and security-related functionality.</p>
  *
- * @author HCL Tech
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 2025-01-01
+ * @since 2025-11-17
  */
 @Configuration
 public class AppConfig {

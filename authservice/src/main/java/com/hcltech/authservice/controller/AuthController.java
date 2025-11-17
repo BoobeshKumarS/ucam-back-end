@@ -35,9 +35,9 @@ import com.hcltech.authservice.service.AuthService;
  *   <li>Role-based authorization using Spring Security annotations</li>
  * </ul>
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see AuthService
  * @see PreAuthorize
  * @see Authentication

@@ -14,9 +14,9 @@ import lombok.Data;
  * <p>This DTO provides all necessary information for the client to maintain
  * the user session and display user-specific content.
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see UserRole
  */
 @Data

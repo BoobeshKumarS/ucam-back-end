@@ -23,9 +23,9 @@ import java.util.Optional;
  * <p>The service uses email as the username for authentication purposes
  * and provides user details including credentials and authorities.
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see UserDetailsService
  * @see UserDetails
  */

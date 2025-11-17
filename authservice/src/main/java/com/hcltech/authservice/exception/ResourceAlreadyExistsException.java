@@ -12,9 +12,9 @@ import lombok.Setter;
  * <p>Provides detailed information about the conflicting resource
  * for better error reporting and client handling.
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see RuntimeException
  */
 @Getter

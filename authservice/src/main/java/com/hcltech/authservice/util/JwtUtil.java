@@ -33,9 +33,9 @@ import java.security.Key;
  *
  * <p>Uses HMAC-SHA512 algorithm for token signing and Base64-encoded secret key.
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see io.jsonwebtoken.Jwts
  * @see SignatureAlgorithm
  */

@@ -49,9 +49,9 @@ import java.util.Set;
  *   <li>JWT filter integration for token validation</li>
  * </ul>
  *
- * @author HCL Tech
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 2025-01-01
+ * @since 2025-11-17
  */
 @Configuration
 @EnableWebSecurity

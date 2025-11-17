@@ -12,9 +12,9 @@ import lombok.Setter;
  * <p>Typically thrown during user lookup operations when no user matches
  * the provided criteria (email, username, etc.).
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see RuntimeException
  */
 @Getter

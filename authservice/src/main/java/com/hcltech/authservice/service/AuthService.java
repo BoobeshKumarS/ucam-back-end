@@ -19,9 +19,9 @@ import com.hcltech.authservice.dto.UserRegisterResponseDTO;
  * <p>Implementations of this interface handle the core business logic for
  * user authentication and authorization processes.
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see com.hcltech.authservice.service.impl.AuthServiceImpl
  * @see org.springframework.stereotype.Service
  */

@@ -36,9 +36,9 @@ import java.util.List;
  *   <li>Continues filter chain for authorized requests</li>
  * </ol>
  *
- * @author HCL Technologies
+ * @author Boobesh Kumar S
  * @version 1.0
- * @since 1.0
+ * @since 2025-11-17
  * @see OncePerRequestFilter
  * @see JwtUtil
  */
