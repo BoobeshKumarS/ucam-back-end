@@ -3,6 +3,7 @@ package com.hcltech.studentservice.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import com.hcltech.studentservice.dto.StudentUpdateDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,24 +107,23 @@ public class StudentServiceImpl implements StudentService {
      * Updates student details for the given ID.
      *
      * @param id the UUID of the student to update
-     * @param studentRequest the updated student details
+     * @param studentUpdate the updated student details
      * @return StudentResponseDTO containing updated student details
      * @throws UserNotFoundException if student is not found
      */
     @Override
-    public StudentResponseDTO updateStudent(UUID id, StudentRequestDTO studentRequest) {
+    public StudentResponseDTO updateStudent(UUID id, StudentUpdateDTO studentUpdate) {
         studentLogger.info("Updating student with ID: {}", id);
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Student", id));
 
-        student.setFirstName(studentRequest.getFirstName());
-        student.setLastName(studentRequest.getLastName());
-        student.setEmail(studentRequest.getEmail());
-        student.setDateOfBirth(studentRequest.getDateOfBirth());
-        student.setPhoneNumber(studentRequest.getPhoneNumber());
-        student.setGender(studentRequest.getGender());
-        student.setNationality(studentRequest.getNationality());
-        student.setAddress(studentRequest.getAddress());
+        student.setFirstName(studentUpdate.getFirstName());
+        student.setLastName(studentUpdate.getLastName());
+        student.setDateOfBirth(studentUpdate.getDateOfBirth());
+        student.setPhoneNumber(studentUpdate.getPhoneNumber());
+        student.setGender(studentUpdate.getGender());
+        student.setNationality(studentUpdate.getNationality());
+        student.setAddress(studentUpdate.getAddress());
 
         studentRepository.save(student);
         studentLogger.info("Student updated successfully: {}", student.getId());

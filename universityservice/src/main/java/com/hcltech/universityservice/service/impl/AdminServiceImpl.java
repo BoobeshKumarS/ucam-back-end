@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.hcltech.universityservice.dto.AdminRequestDTO;
+import com.hcltech.universityservice.dto.AdminUpdateDTO;
 import com.hcltech.universityservice.dto.AdminResponseDTO;
 import com.hcltech.universityservice.entity.Admin;
 import com.hcltech.universityservice.exception.UserNotFoundException;
@@ -56,21 +57,19 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<AdminResponseDTO> getAllAdmins() {
-		List<AdminResponseDTO> admins = adminRepository.findAll().stream().map(adminConverter::toResponse)
+		return adminRepository.findAll().stream().map(adminConverter::toResponse)
 				.toList();
-		return admins;
 	}
 
 	@Override
-	public AdminResponseDTO updateAdmin(UUID id, AdminRequestDTO adminRequest) {
+	public AdminResponseDTO updateAdmin(UUID id, AdminUpdateDTO adminUpdate) {
 		Admin admin = adminRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Admin", id));
-		admin.setFirstName(adminRequest.getFirstName());
-        admin.setLastName(adminRequest.getLastName());
-        admin.setEmail(adminRequest.getEmail());
-        admin.setDateOfBirth(adminRequest.getDateOfBirth());
-        admin.setPhoneNumber(adminRequest.getPhoneNumber());
-        admin.setGender(adminRequest.getGender());
-        admin.setNationality(adminRequest.getNationality());
+		admin.setFirstName(adminUpdate.getFirstName());
+        admin.setLastName(adminUpdate.getLastName());
+        admin.setDateOfBirth(adminUpdate.getDateOfBirth());
+        admin.setPhoneNumber(adminUpdate.getPhoneNumber());
+        admin.setGender(adminUpdate.getGender());
+        admin.setNationality(adminUpdate.getNationality());
         
 		adminRepository.save(admin);
 		return adminConverter.toResponse(admin);

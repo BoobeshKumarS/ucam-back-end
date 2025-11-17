@@ -139,27 +139,27 @@ public class WebSecurityConfig {
 		return authConfig.getAuthenticationManager();
 	}
 
-	@Bean
-	public CommandLineRunner initDefaultAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-		return args -> {
-			if (!userRepository.existsByUsername("admin")) {
-				User admin = new User();
-
-				admin.setUsername("admin");
-				admin.setEmail("admin@gmail.com");
-				admin.setPassword(passwordEncoder.encode("adminPass"));
-
-				// Assign ADMIN role
-				Set<UserRole> roles = new HashSet<>();
-				roles.add(UserRole.ADMIN);
-				admin.setRoles(roles);
-
-				userRepository.save(admin);
-				securityLogger.info("Default ADMIN user created: admin / adminPass");
-			} else {
-				securityLogger.info("Admin user already exists. Skipping creation.");
-			}
-		};
-	}
+//	@Bean
+//	public CommandLineRunner initDefaultAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+//		return args -> {
+//			if (!userRepository.existsByUsername("admin")) {
+//				User admin = new User();
+//
+//				admin.setUsername("admin");
+//				admin.setEmail("admin@gmail.com");
+//				admin.setPassword(passwordEncoder.encode("adminPass"));
+//
+//				// Assign ADMIN role
+//				Set<UserRole> roles = new HashSet<>();
+//				roles.add(UserRole.ADMIN);
+//				admin.setRoles(roles);
+//
+//				userRepository.save(admin);
+//				securityLogger.info("Default ADMIN user created: admin / adminPass");
+//			} else {
+//				securityLogger.info("Admin user already exists. Skipping creation.");
+//			}
+//		};
+//	}
 
 }

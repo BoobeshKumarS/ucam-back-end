@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcltech.universityservice.dto.AdminRequestDTO;
+import com.hcltech.universityservice.dto.AdminUpdateDTO;
 import com.hcltech.universityservice.dto.AdminResponseDTO;
 import com.hcltech.universityservice.service.AdminService;
 
@@ -105,8 +106,8 @@ public class AdminController {
 	@PutMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<AdminResponseDTO> updateAdmin(@PathVariable UUID id,
-			@Valid @RequestBody AdminRequestDTO adminRequest) {
-		AdminResponseDTO adminResponse = adminService.updateAdmin(id, adminRequest);
+			@Valid @RequestBody AdminUpdateDTO adminUpdate) {
+		AdminResponseDTO adminResponse = adminService.updateAdmin(id, adminUpdate);
 		return new ResponseEntity<AdminResponseDTO>(adminResponse, HttpStatus.OK);
 	}
 	

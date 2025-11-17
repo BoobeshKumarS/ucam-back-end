@@ -3,6 +3,7 @@ package com.hcltech.studentservice.controller;
 import java.util.List;
 import java.util.UUID;
 
+import com.hcltech.studentservice.dto.StudentUpdateDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,15 +82,15 @@ public class StudentController {
      * Updates student details. Accessible only by STUDENT role.
      *
      * @param id             the UUID of the student to update
-     * @param studentRequest the updated student details
+     * @param studentUpdate the updated student details
      * @return ResponseEntity containing updated student details
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<StudentResponseDTO> updateStudent(@PathVariable UUID id,
-            @Valid @RequestBody StudentRequestDTO studentRequest) {
+            @Valid @RequestBody StudentUpdateDTO studentUpdate) {
         logger.info("Updating student with ID: {}", id);
-        StudentResponseDTO studentResponse = studentService.updateStudent(id, studentRequest);
+        StudentResponseDTO studentResponse = studentService.updateStudent(id, studentUpdate);
         logger.debug("Student updated successfully: {}", studentResponse);
         return new ResponseEntity<>(studentResponse, HttpStatus.OK);
     }
